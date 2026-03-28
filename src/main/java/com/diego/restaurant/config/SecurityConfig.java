@@ -44,17 +44,27 @@ public class SecurityConfig {
         return http.build();
     }
 
-    @Bean
-    public JwtAuthenticationConverter jwtAuthenticationConverter() {
-        JwtGrantedAuthoritiesConverter converter = new JwtGrantedAuthoritiesConverter();
+@Bean
+public JwtAuthenticationConverter jwtAuthenticationConverter() {
+    JwtAuthenticationConverter jwtConverter = new JwtAuthenticationConverter();
 
+    jwtConverter.setJwtGrantedAuthoritiesConverter(jwt -> {
+        Collection<GrantedAuthority> authorities = new ArrayList<>();
 
-        converter.setAuthorityPrefix("ROLE_");
-        converter.setAuthoritiesClaimName("realm_access.roles");
+        Map<String, Object> realmAccess = jwt.getClaim("realm_access");
 
-        JwtAuthenticationConverter jwtConverter = new JwtAuthenticationConverter();
-        jwtConverter.setJwtGrantedAuthoritiesConverter(converter);
+        if (realmAccess != null && realmAccess.containsKey("roles")) {
+            Collection<String> roles = (Collection<String>) realmAccess.get("roles");
 
-        return jwtConverter;
-    }
+            authorities.addAll(
+                roles.stream()
+                    .map(role -> new SimpleGrantedAuthority("ROLE_" + role.toUpperCase()))
+                    .toList()
+            );
+        }
+
+        return authorities;
+    });
+
+    return jwtConverter;
 }
