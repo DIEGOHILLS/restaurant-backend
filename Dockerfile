@@ -1,14 +1,19 @@
-# Use Java 21
-FROM eclipse-temurin:21-jdk
 
-# App directory
+FROM maven:3.9.9-eclipse-temurin-21 AS builder
+
 WORKDIR /app
 
-# Copy jar
-COPY target/restaurant-0.0.1-SNAPSHOT.jar app.jar
+COPY . .
 
-# Expose port (Render will override)
+RUN mvn clean package -DskipTests
+
+
+FROM eclipse-temurin:21-jdk
+
+WORKDIR /app
+
+COPY --from=builder /app/target/restaurant-0.0.1-SNAPSHOT.jar app.jar
+
 EXPOSE 8080
 
-# Run app
 ENTRYPOINT ["java","-jar","/app/app.jar"]
