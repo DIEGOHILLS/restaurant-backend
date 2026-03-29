@@ -1,17 +1,14 @@
 package com.diego.restaurant.mappers;
 
-import com.diego.restaurant.domain.ReviewCreateUpdateRequest;
-import com.diego.restaurant.domain.dtos.ReviewCreateUpdateRequestDto;
-import com.diego.restaurant.domain.dtos.ReviewDto;
 import com.diego.restaurant.domain.entities.Review;
-import org.mapstruct.Mapper;
-import org.mapstruct.ReportingPolicy;
+import com.diego.restaurant.domain.dtos.ReviewCreateUpdateRequestDto;
 
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface ReviewMapper {
+public class ReviewMapper {
 
-    ReviewCreateUpdateRequest toReviewCreateUpdateRequest(ReviewCreateUpdateRequestDto dto);
-
-    ReviewDto toDto(Review review);
-
+    public static Review toEntity(ReviewCreateUpdateRequestDto dto) {
+        return Review.builder()
+                .rating(dto.getRating())
+                .comment(dto.getComment())
+                .build();
+    }
 }
