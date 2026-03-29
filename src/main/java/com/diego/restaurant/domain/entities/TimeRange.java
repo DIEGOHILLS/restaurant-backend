@@ -1,21 +1,18 @@
 package com.diego.restaurant.domain.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.data.elasticsearch.annotations.Field;
-import org.springframework.data.elasticsearch.annotations.FieldType;
+import jakarta.persistence.Embeddable;
+import lombok.*;
 
-@Data
-@AllArgsConstructor
+import java.time.LocalTime;
+
+@Embeddable
+@Getter
+@Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class TimeRange {
 
-    @Field(type = FieldType.Keyword)
-    private String openTime;
-
-    @Field(type = FieldType.Keyword)
-    private String closeTime;
+    private LocalTime openTime;
+    private LocalTime closeTime;
 }
