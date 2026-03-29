@@ -1,56 +1,29 @@
 package com.diego.restaurant.domain.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.elasticsearch.annotations.Document;
-import org.springframework.data.elasticsearch.annotations.Field;
-import org.springframework.data.elasticsearch.annotations.FieldType;
-import org.springframework.data.elasticsearch.annotations.GeoPointField;
-import org.springframework.data.elasticsearch.core.geo.GeoPoint;
+import jakarta.persistence.*;
+import lombok.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
-@Document(indexName = "restaurants", createIndex = true)
-@Data
-@AllArgsConstructor
+@Entity
+@Table(name = "restaurants")
+@Getter
+@Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class Restaurant {
 
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @Field(type = FieldType.Text)
     private String name;
+    private String address;
+    private String city;
+    private String cuisine;
+    private Double rating;
 
-    @Field(type = FieldType.Text)
-    private String cuisineType;
-
-    @Field(type = FieldType.Keyword)
-    private String contactInformation;
-
-    @Field(type = FieldType.Float)
-    private Float averageRating;
-
-    @GeoPointField
-    private GeoPoint geoLocation;
-
-    @Field(type = FieldType.Object)
-    private Address address;
-
-    @Field(type = FieldType.Object)
-    private OperatingHours operatingHours;
-
-    @Field(type = FieldType.Nested)
-    private List<Photo> photos = new ArrayList<>();
-
-    @Field(type = FieldType.Nested)
-    private List<Review> reviews = new ArrayList<>();
-
-    @Field(type = FieldType.Object)
-    private User createdBy;
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
+    private List<Review> reviews;
 }
