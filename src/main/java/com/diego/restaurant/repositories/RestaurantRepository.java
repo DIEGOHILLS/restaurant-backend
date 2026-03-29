@@ -1,49 +1,15 @@
 package com.diego.restaurant.repositories;
 
 import com.diego.restaurant.domain.entities.Restaurant;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.elasticsearch.annotations.Query;
-import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-@Repository
-public interface RestaurantRepository extends ElasticsearchRepository<Restaurant, String> {
+import java.util.List;
+import java.util.UUID;
 
-    Page<Restaurant> findByAverageRatingGreaterThanEqual(Float minRating, Pageable pageable);
+public interface RestaurantRepository extends JpaRepository<Restaurant, UUID> {
 
-    @Query("{" +
-            "  \"bool\": {" +
-            "    \"must\": [" +
-            "      {\"range\": {\"averageRating\": {\"gte\": ?1}}}" +
-            "    ]," +
-            "    \"should\": [" +
-            "      {\"fuzzy\": {\"name\": {\"value\": \"?0\", \"fuzziness\": \"AUTO\"}}}," +
-            "      {\"fuzzy\": {\"cuisineType\": {\"value\": \"?0\", \"fuzziness\": \"AUTO\"}}}" +
-            "    ]," +
-            "    \"minimum_should_match\": 1" +
-            "  }" +
-            "}" +
-            "}")
-    Page<Restaurant> findByQueryAndMinRating(String query, Float minRating, Pageable pageable);
+    List<Restaurant> findByNameContainingIgnoreCase(String name);
 
-    @Query("{" +
-            "  \"bool\": {" +
-            "    \"must\": [" +
-            "      {\"geo_distance\": {" +
-            "        \"distance\": \"?2km\"," +
-            "        \"geoLocation\": {" +
-            "          \"lat\": ?0," +
-            "          \"lon\": ?1" +
-            "        }" +
-            "      }}" +
-            "    ]" +
-            "  }" +
-            "}")
-    Page<Restaurant> findByLocationNear(
-            Float latitude,
-            Float longitude,
-            Float radiusKm,
-            Pageable pageable);
+    List<Restaurant> findByCuisineContainingIgnoreCase(String cuisine);
 
 }
