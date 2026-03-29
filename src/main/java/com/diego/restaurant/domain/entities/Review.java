@@ -19,12 +19,8 @@ public class Review {
     private Long id;
 
     private String title;
-
-    @Column(length = 2000)
     private String content;
-
     private Integer rating;
-
     private LocalDateTime createdAt;
 
     @ManyToOne
