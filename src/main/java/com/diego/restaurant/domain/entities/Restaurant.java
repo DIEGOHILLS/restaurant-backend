@@ -14,7 +14,7 @@ import org.springframework.data.elasticsearch.core.geo.GeoPoint;
 import java.util.ArrayList;
 import java.util.List;
 
-@Document(indexName = "restaurants", createIndex = false)
+@Document(indexName = "restaurants", createIndex = true)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -39,10 +39,10 @@ public class Restaurant {
     @GeoPointField
     private GeoPoint geoLocation;
 
-    @Field(type = FieldType.Nested)
+    @Field(type = FieldType.Object)
     private Address address;
 
-    @Field(type = FieldType.Nested)
+    @Field(type = FieldType.Object)
     private OperatingHours operatingHours;
 
     @Field(type = FieldType.Nested)
@@ -51,6 +51,6 @@ public class Restaurant {
     @Field(type = FieldType.Nested)
     private List<Review> reviews = new ArrayList<>();
 
-    @Field(type = FieldType.Nested)
+    @Field(type = FieldType.Object)
     private User createdBy;
 }
