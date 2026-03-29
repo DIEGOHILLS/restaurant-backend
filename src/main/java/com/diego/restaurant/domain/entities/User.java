@@ -1,27 +1,20 @@
 package com.diego.restaurant.domain.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.data.elasticsearch.annotations.Field;
-import org.springframework.data.elasticsearch.annotations.FieldType;
+import jakarta.persistence.*;
+import lombok.*;
 
-@Data
-@AllArgsConstructor
+@Entity
+@Table(name = "users")
+@Getter
+@Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class User {
 
-    @Field(type = FieldType.Keyword)
-    private String id;
+    @Id
+    private String id; // from Keycloak
 
-    @Field(type = FieldType.Text)
     private String username;
-
-    @Field(type = FieldType.Text)
-    private String givenName;
-
-    @Field(type = FieldType.Text)
-    private String familyName;
+    private String email;
 }
